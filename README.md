@@ -4,6 +4,10 @@ BlockMentor is a mentor agent that builds structured, level-aware study plans fo
 
 It is built on the official [Agentmaxxing starter kit](https://www.npmjs.com/package/agentmaxxin) (`npx agentmaxxin blockmentor-agentmaxxing-web`): a Next.js app with a Gemini tool-calling loop and an x402 demo wallet.
 
+## Live Demo
+
+https://blockmentor-agentmaxxing.vercel.app/
+
 ## What the agent does
 
 1. Chats through `POST /api/agent`, which runs the tool loop in `agent/agent.ts`.
@@ -24,7 +28,11 @@ npm install
 ## Configure the Gemini API key
 
 1. Get a free key at https://aistudio.google.com/apikey
-2. Open `.env` in the project root and paste it after the equals sign:
+2. Create your local `.env` from the template, then paste the key after the equals sign:
+
+```bash
+cp .env.example .env
+```
 
 ```bash
 GEMINI_API_KEY=paste_your_key_here

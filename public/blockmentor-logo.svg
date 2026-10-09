@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="96" viewBox="0 0 360 96" role="img" aria-label="BlockMentor logo">
+  <rect width="360" height="96" rx="12" fill="#0A0A0A"/>
+  <g fill="#C8E850">
+    <rect x="20" y="24" width="22" height="22" rx="3"/>
+    <rect x="48" y="24" width="22" height="22" rx="3" opacity="0.75"/>
+    <rect x="20" y="52" width="22" height="22" rx="3" opacity="0.75"/>
+    <rect x="48" y="52" width="22" height="22" rx="3" opacity="0.5"/>
+  </g>
+  <text x="88" y="47" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="700" fill="#F2F1EC">BlockMentor</text>
+  <text x="89" y="70" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#9A9A93">learn web3, one plan at a time</text>
+</svg>

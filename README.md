@@ -1,100 +1,138 @@
-# BlockMentor — Agentmaxxing Starter (Week 1)
+<p align="center">
+  <img src="public/blockmentor-logo.svg" alt="BlockMentor logo" width="360" />
+</p>
 
-BlockMentor is a mentor agent that builds structured, level-aware study plans for Web3 and Solidity topics. Ask it for a plan and it returns time allocation, learning objectives, a practice activity, and a final review step — instantly and for free.
+# BlockMentor — AI Mentor Agent for Web3 (Agentmaxxing Week 1)
 
-It is built on the official [Agentmaxxing starter kit](https://www.npmjs.com/package/agentmaxxin) (`npx agentmaxxin blockmentor-agentmaxxing-web`): a Next.js app with a Gemini tool-calling loop and an x402 demo wallet.
+Week 1 (BlockMentor.v1): https://blockmentor-agentmaxxing.vercel.app/
 
-## Live Demo
+## The problem it solves
 
-https://blockmentor-agentmaxxing.vercel.app/
+Learning Web3 and Solidity as a beginner is fragmented: scattered tutorials, no idea where to start, no time budget, and no instant feedback. BlockMentor is a chat agent that answers with structure instead of links — a level-aware study plan, a beginner quiz, or a clear concept breakdown — instantly and for free, with no wallet, payment, or signup required to use its core tools.
 
-## What the agent does
+## Description
 
-1. Chats through `POST /api/agent`, which runs the tool loop in `agent/agent.ts`.
-2. Calls `get_study_plan` to produce a deterministic study plan (no external API, no payment) from `topic`, `minutes`, and `level` (`beginner` | `intermediate` | `advanced`).
-3. Also exposes the starter tools `get_my_wallet` (address + Base Sepolia balance) and `roll_dice`.
-4. Keeps the starter's wallet/x402 code so paid-API tools can be added later.
+BlockMentor is a Next.js chat app with a Gemini tool-calling loop and five tools. You type a prompt, the model picks a tool, and the UI shows each tool step and its structured result. Two of the tools are local, deterministic learning tools built for this week (`get_study_plan`, `generate_quiz`, `explain_solidity_concept`); two are starter tools kept from the kit (`get_my_wallet`, `roll_dice`). The starter's wallet/x402 payment code is preserved so paid tools can be switched on in Week 2 without re-architecting.
 
-## Install
+Built on the official [Agentmaxxing starter kit](https://www.npmjs.com/package/agentmaxxin) (`npx agentmaxxin blockmentor-agentmaxxing-web`).
+
+## Tech stack (exact installed versions)
+
+| Layer | Version |
+| :--- | :--- |
+| Next.js (App Router) | 16.4.0 |
+| React / React DOM | 19.3.0 |
+| TypeScript | 5.9.3 |
+| Tailwind CSS / @tailwindcss/postcss | 4.3.3 |
+| @google/genai (Gemini SDK) | 2.28.0 |
+| viem (Stellar/Base wallet helpers) | 2.57.4 |
+| lucide-react | 1.53.0 |
+| @base-ui/react / shadcn / tw-animate-css | 1.8.0 / 1.0.0 / 1.4.0 |
+| Node.js (runtime used here) | 22.23.2 |
+
+## AI models
+
+| Model | Status |
+| :--- | :--- |
+| `gemini-3.8-flash` | **Verified.** Configured in the Vercel production environment (`GEMINI_MODEL`); Google's API referenced it in a 429 quota response. This is what the live demo runs. |
+| `gemini-flash-latest` | **Untested fallback.** The code default in `agent/agent.ts` when `GEMINI_MODEL` is unset. Not verified against the API — do not claim it as supported. |
+
+Gemini free-tier quota observed during development: 20 requests/day for `gemini-3.8-flash`.
+
+## All 5 tools
+
+| # | Tool | Kind | What it does |
+| :--- | :--- | :--- | :--- |
+| 1 | `get_study_plan` | Local, deterministic | Structured study plan: `timeAllocation` (minutes sum exactly to the request), `learningObjectives`, `practiceActivity`, `finalReview`. Inputs: `topic`, `minutes` (clamped 15–240), `level`. |
+| 2 | `generate_quiz` | Local, deterministic | Beginner quiz for a supported concept: 1–3 multiple-choice questions with options, `answerIndex`, and `explanation`. Unknown topic → returns the supported topic list. |
+| 3 | `explain_solidity_concept` | Local, deterministic | Structured concept explanation: `summary`, `syntax`, `keyPoints`, `example`, `commonMistakes`. Unknown concept → returns the supported concept list. |
+| 4 | `get_my_wallet` | Starter tool | Reads the agent's own demo wallet address and Base Sepolia balance (read-only). |
+| 5 | `roll_dice` | Starter tool | Plain deterministic dice roll; no wallet, no API. |
+
+Supported quiz/explanation topics: Solidity mappings, arrays, structs, data locations, `msg.sender`, error handling (`agent/concepts.ts`).
+
+## Key features
+
+- Chat UI (`app/page.tsx`) that auto-lists every registered tool from `GET /api/agent` — no manual tool wiring in the UI.
+- Gemini function-calling loop with visible per-tool steps and structured JSON results.
+- Local learning tools: no external API, no randomness, no payment — same input always returns the same output.
+- Wallet-aware loop preserved from the starter (read-only by default; payment path intact for Week 2).
+- Secrets stay local: `.env`, `.env.local`, `.agent-wallet.json` are gitignored; no keys in the repo.
+
+## Demo video
+
+To be added after recording.
+
+## Install, configure, run
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/sadiyamulani03/blockmentor-agentmaxxing.git
 cd blockmentor-agentmaxxing-web
 npm install
+cp .env.example .env   # then paste your key: GEMINI_API_KEY=...
+npm run dev            # open http://localhost:3000
 ```
 
-(Fresh scaffold instead: `npx agentmaxxin blockmentor-agentmaxxing-web`.)
+- Get a free Gemini key at https://aistudio.google.com/apikey — never commit it or paste it into docs/screenshots.
+- Optional: `GEMINI_MODEL` overrides the model (production uses `gemini-3.8-flash`); `WALLET_PRIVATE_KEY` supplies a test key, otherwise use the in-app Create wallet button.
+- Build check: `npm run build` and `npx tsc --noEmit`.
 
-## Configure the Gemini API key
+## Testing the local tools
 
-1. Get a free key at https://aistudio.google.com/apikey
-2. Create your local `.env` from the template, then paste the key after the equals sign:
-
-```bash
-cp .env.example .env
-```
-
-```bash
-GEMINI_API_KEY=paste_your_key_here
-```
-
-Never commit `.env` (it is in `.gitignore`) and never paste a real key into docs, code, or screenshots. Restart `npm run dev` after changing it.
-
-## Run
-
-```bash
-npm run dev
-```
-
-Open http://localhost:3000. Type a prompt in the chat, or use an example button.
-
-## Test get_study_plan
-
-1. Start the app and send: `Create a 30-minute beginner study plan for Solidity mappings.`
-2. Expand the `get_study_plan` tool step in the chat to inspect its output.
-3. Expected result: an object with
-   - `timeAllocation` — four sections (Warm-up, Core, Practice, Final review) whose minutes sum to 30
-   - `learningObjectives` — three level-appropriate objectives
-   - `practiceActivity` — task, deliverable, minutes
-   - `finalReview` — a three-item checklist
-4. Determinism check: the same `topic`/`minutes`/`level` always returns the identical plan (no randomness, no network).
-
-The tool is listed in the Tools panel and is defined in `agent/tools.ts`.
-
-## Week 1 learnings
-
-1. Scaffolded the official Agentmaxxing starter and traced the chat flow from `app/page.tsx` to `app/api/agent/route.ts` into the Gemini function-calling loop.
-2. Replaced the starter's sample paid-weather tool with `get_study_plan`, learning how tool schemas (`name`, `description`, JSON parameters) drive Gemini's decisions and how results flow back into the loop.
-3. Made the tool deterministic and structured: fixed time-budget math (sums exactly to `minutes`), level-based objective templates, and validation/clamping of inputs.
-4. Debugged real build failures: a bad `shadcn` CSS import, a dependency downgraded by `npm audit fix --force`, and platform-specific native binaries after mixed Windows/WSL installs. Lesson: avoid `npm audit fix --force`, and reinstall dependencies from one OS only.
+1. Send `Create a 30-minute beginner study plan for Solidity mappings.` → expand the `get_study_plan` step: four sections summing to 30 minutes, three objectives, practice activity, review checklist.
+2. Send `Quiz me on Solidity mappings, 2 questions.` → `generate_quiz` returns 2 questions with answers and explanations.
+3. Send `Explain msg.sender.` → `explain_solidity_concept` returns summary, syntax, key points, example, common mistakes.
+4. Determinism: repeat any of the above — identical output every time.
 
 ## Project structure
 
 | Path | Description |
 | :--- | :--- |
-| `agent/tools.ts` | Tool definitions, including `get_study_plan`. |
+| `agent/tools.ts` | All 5 tool definitions. |
+| `agent/concepts.ts` | Local concept/quiz bank for tools 2–3 (content only, no I/O). |
 | `agent/agent.ts` | Gemini tool-calling loop (unchanged from starter). |
 | `agent/wallet.ts` | Starter wallet + x402 payment helpers (unchanged). |
-| `app/page.tsx` | Chat UI, setup steps, tools list. |
+| `app/page.tsx` | Chat UI, setup steps, auto tool list. |
 | `app/api/agent/route.ts` | GET status/tools, POST runs the agent. |
 | `app/api/wallet/route.ts` | Creates/reads the demo wallet. |
+| `public/blockmentor-logo.svg` | Product logo (local SVG, no external assets). |
 | `.env` | Local secrets — gitignored, never committed. |
 
-## Configuration
+## Week 1 learnings
 
-| Variable | Required | Description |
-| :--- | :--- | :--- |
-| `GEMINI_API_KEY` | Yes | Your Gemini API key (kept local in `.env`). |
-| `GEMINI_MODEL` | No | Defaults to `gemini-flash-latest`. |
-| `WALLET_PRIVATE_KEY` | No | Optional test wallet key; otherwise use the in-app Create wallet button. |
+1. Traced the chat flow from `app/page.tsx` → `app/api/agent/route.ts` → the Gemini function-calling loop, and saw how tool schemas (`name`, `description`, JSON parameters) drive model decisions.
+2. Replaced the starter's paid-weather sample with `get_study_plan`, then added `generate_quiz` and `explain_solidity_concept` sharing one content bank — deterministic tools are free, testable, and quota-independent.
+3. Fixed real build failures: a bad `shadcn` CSS import, a dependency downgraded by `npm audit fix --force`, and mixed Windows/WSL installs. Lesson: never run `npm audit fix --force`, install deps from one OS only.
+
+## Future scope (planned, not built)
+
+- **Week 2 — x402 payments:** wire a paid external-data tool through the starter's existing `verifyPayment`/`payAndFetch` helpers (requires a funded demo wallet; not enabled in Week 1).
+- **Week 3 — ZK integration:** explore a ZK-backed credential/attestation feature for completed study plans.
+- Expand the concept bank and quiz difficulty levels; add spaced-repetition review plans.
+
+## Socials
+
+- **X (Twitter):** dedicated BlockMentor product X page — *to be added* (page not created yet; no URL is claimed here).
+- Starter kit credit: [RiseIn Agentmaxxing kit](https://www.npmjs.com/package/agentmaxxin).
+
+## Week 1 acceptance checklist
+
+- [x] Deployed live demo with exact line `Week 1 (BlockMentor.v1): https://blockmentor-agentmaxxing.vercel.app/`
+- [x] Logo: local product logo `public/blockmentor-logo.svg` (no external assets)
+- [x] README covers: name, problem, description, tech stack (exact versions), all 5 tools, AI models (verified vs untested), key features, demo video placeholder, future scope (Week 2/3, labeled planned), socials
+- [x] Exactly 2 new local tools added on top of the starter's 3 → 5 total, all registered in the UI
+- [x] New tools deterministic, no external API, no wallet/payment, no new dependencies
+- [x] Wallet-payment and agent-loop starter code preserved; no wallet created or funded
+- [x] No secrets in repo; `.env*` and `.agent-wallet.json` gitignored
+- [x] Build passes (`npm run build`) and typecheck passes (`npx tsc --noEmit`)
 
 ## Troubleshooting
 
 | Problem | Solution |
 | :--- | :--- |
 | Page says to add `GEMINI_API_KEY` | Add it to `.env`, restart `npm run dev`. |
-| Agent never calls `get_study_plan` | Make the prompt mention a topic, minutes, and level. |
-| CSS error about `shadcn/tailwind.css` | Run `npm install` so dependencies match your OS. |
+| Agent never calls a study/quiz tool | Mention a topic (and minutes/level) in the prompt. |
+| `429` quota errors from Gemini | Free tier is ~20 requests/day; wait for reset. |
 | Port 3000 in use | `npm run dev -- -p 3001` |
 
 ## License

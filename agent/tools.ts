@@ -9,6 +9,7 @@
  * and save. It shows up in the "Tools" list on the page.
  */
 import { getWalletAddress, getWalletBalance } from "./wallet";
+import { findConcept, SUPPORTED_CONCEPTS } from "./concepts";
 
 export type Tool = {
   name: string;
@@ -106,7 +107,75 @@ export const tools: Tool[] = [
     },
   },
 
-  // ─── 2. Wallet tool: read the agent's own wallet ───
+  // ─── 2. A local tool: beginner quiz for a supported concept. No API, no payment ───
+  {
+    name: "generate_quiz",
+    description:
+      "Generate a small beginner quiz for a supported Solidity concept: multiple-choice questions with answers and explanations. Runs locally and is free. Returns the supported topic list if the topic is unknown.",
+    parameters: {
+      type: "object",
+      properties: {
+        topic: { type: "string", description: 'The concept to quiz on, e.g. "Solidity mappings"' },
+        questionCount: { type: "number", description: "How many questions, 1-3. Default 3." },
+      },
+      required: ["topic"],
+    },
+    run: async ({ topic, questionCount }) => {
+      const concept = findConcept(topic);
+      if (!concept) {
+        return {
+          supported: false,
+          error: `No quiz bank for "${String(topic ?? "").trim() || "(empty)"}".`,
+          supportedTopics: SUPPORTED_CONCEPTS,
+        };
+      }
+      const want = Number.isFinite(Number(questionCount)) && Number(questionCount) > 0 ? Math.round(Number(questionCount)) : 3;
+      const n = Math.max(1, Math.min(concept.quiz.length, want));
+      return {
+        supported: true,
+        topic: concept.title,
+        level: "beginner",
+        questionCount: n,
+        questions: concept.quiz.slice(0, n),
+        note: n < want ? `Only ${concept.quiz.length} question(s) available for this topic.` : undefined,
+      };
+    },
+  },
+
+  // ─── 3. A local tool: structured explanation of a supported concept ───
+  {
+    name: "explain_solidity_concept",
+    description:
+      "Return a concise structured explanation of a supported Solidity concept: summary, syntax, key points, an example, and common mistakes. Runs locally and is free. Returns the supported concept list if the concept is unknown.",
+    parameters: {
+      type: "object",
+      properties: {
+        concept: { type: "string", description: 'The concept to explain, e.g. "msg.sender" or "Solidity structs"' },
+      },
+      required: ["concept"],
+    },
+    run: async ({ concept }) => {
+      const found = findConcept(concept);
+      if (!found) {
+        return {
+          supported: false,
+          error: `No explanation for "${String(concept ?? "").trim() || "(empty)"}".`,
+          supportedConcepts: SUPPORTED_CONCEPTS,
+        };
+      }
+      return {
+        supported: true,
+        concept: found.title,
+        summary: found.summary,
+        syntax: found.syntax,
+        keyPoints: found.keyPoints,
+        example: found.example,
+        commonMistakes: found.commonMistakes,
+      };
+    },
+  },
+
+  // ─── 4. Wallet tool: read the agent's own wallet ───
   {
     name: "get_my_wallet",
     description: "Get the agent's own wallet address and its ETH balance on Base Sepolia (testnet).",
@@ -118,7 +187,7 @@ export const tools: Tool[] = [
     }),
   },
 
-  // ─── 3. A plain tool: no wallet, no API. Try changing this one first! ───
+  // ─── 5. A plain tool: no wallet, no API. Try changing this one first! ───
   {
     name: "roll_dice",
     description: "Roll a dice with the given number of sides.",

@@ -112,19 +112,7 @@ npm run dev            # open http://localhost:3000
 
 ## Socials
 
-- **X (Twitter):** dedicated BlockMentor product X page — *to be added* (page not created yet; no URL is claimed here).
 - Starter kit credit: [RiseIn Agentmaxxing kit](https://www.npmjs.com/package/agentmaxxin).
-
-## Week 1 acceptance checklist
-
-- [x] Deployed live demo with exact line `Week 1 (BlockMentor.v1): https://blockmentor-agentmaxxing.vercel.app/`
-- [x] Logo: local product logo `public/blockmentor-logo.svg` (no external assets)
-- [x] README covers: name, problem, description, tech stack (exact versions), all 5 tools, AI models (verified vs untested), key features, demo video link, future scope (Week 2/3, labeled planned), socials
-- [x] Exactly 2 new local tools added on top of the starter's 3 → 5 total, all registered in the UI
-- [x] New tools deterministic, no external API, no wallet/payment, no new dependencies
-- [x] Wallet-payment and agent-loop starter code preserved; no wallet created or funded
-- [x] No secrets in repo; `.env*` and `.agent-wallet.json` gitignored
-- [x] Build passes (`npm run build`) and typecheck passes (`npx tsc --noEmit`)
 
 ## Troubleshooting
 

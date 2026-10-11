@@ -4,7 +4,7 @@
 
 # BlockMentor — AI Mentor Agent for Web3 (Agentmaxxing)
 
-Week 1 (BlockMentor.v1): https://blockmentor-agentmaxxing.vercel.app/
+Live link :- https://blockmentor-agentmaxxing.vercel.app/
 
 ## The problem it solves
 

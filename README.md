@@ -78,6 +78,10 @@ Try it: `Quiz me on Solidity mappings at intermediate difficulty, 2 questions.` 
 
 https://drive.google.com/file/d/1f0G8Yj8ecNEGpPrJzGjTH7ygPYyJPjG4/view?usp=sharing
 
+## Week 2 demo video
+
+https://drive.google.com/file/d/1Gi36cIKKsMvaapDa0md5VNYLbsZCi_oh/view?usp=sharing
+
 ## Install, configure, run
 
 ```bash
@@ -142,6 +146,12 @@ npm run dev            # open http://localhost:3000
 1. https://x.com/BlockMentor03/status/2108883891872518210
 2. https://x.com/BlockMentor03/status/2108883562804240582
 3. https://x.com/BlockMentor03/status/2108883795613262154
+
+### Week 2 social posts
+
+1. https://x.com/BlockMentor03/status/2109158695984906321
+2. https://x.com/BlockMentor03/status/2109158849823584643
+3. https://x.com/BlockMentor03/status/2109159038298755516
 
 ## Troubleshooting
 

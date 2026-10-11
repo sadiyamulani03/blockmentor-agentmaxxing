@@ -1,4 +1,4 @@
-import { MODEL, runAgent } from "@/agent/agent";
+import { GeminiBusyError, MODEL, runAgent } from "@/agent/agent";
 import { tools } from "@/agent/tools";
 
 // GET /api/agent -> setup status + the list of tools (shown on the page)
@@ -21,6 +21,9 @@ export async function POST(req: Request) {
     const result = await runAgent(messages, { baseUrl: new URL(req.url).origin });
     return Response.json(result);
   } catch (err) {
-    return Response.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    if (err instanceof GeminiBusyError) {
+      return Response.json({ error: err.message }, { status: 503 });
+    }
+    return Response.json({ error: "Something went wrong while talking to Gemini. Please try again." }, { status: 500 });
   }
 }

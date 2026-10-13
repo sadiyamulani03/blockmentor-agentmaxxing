@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PremiumPack } from "@/components/premium-pack";
+import { WalletProvider } from "@/components/wallet-context";
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
@@ -85,6 +87,7 @@ export default function Home() {
   const ready = Boolean(status?.hasApiKey);
 
   return (
+    <WalletProvider>
     <main className="mx-auto flex min-h-screen max-w-[1520px] flex-col gap-10 px-4 py-8 md:px-12 md:py-12">
       {/* Header */}
       <header className="flex flex-col gap-6">
@@ -162,6 +165,8 @@ export default function Home() {
               </p>
             </CardContent>
           </Card>
+
+          <PremiumPack />
         </aside>
 
         {/* Right: chat */}
@@ -258,6 +263,7 @@ export default function Home() {
         </Card>
       </div>
     </main>
+    </WalletProvider>
   );
 }
 

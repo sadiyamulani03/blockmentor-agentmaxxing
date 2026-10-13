@@ -5,7 +5,7 @@
  * challenge, and the handler only runs after the facilitator verifies and
  * settles a 0.10 test-USDC payment on Base Sepolia.
  */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { withX402 } from "@x402/next";
 import { getPremiumPackResourceServer, getPremiumPackRoutes } from "@/lib/x402-server";
 
@@ -31,8 +31,14 @@ async function handlerNotConfigured() {
   );
 }
 
-const routes = getPremiumPackRoutes();
+let cachedGet: ((request: NextRequest) => Promise<Response>) | null = null;
 
-export const GET = routes
-  ? withX402(handler, routes, getPremiumPackResourceServer())
-  : handlerNotConfigured;
+export async function GET(request: NextRequest) {
+  const routes = getPremiumPackRoutes();
+  if (!routes) {
+    cachedGet = null;
+    return handlerNotConfigured();
+  }
+  cachedGet ??= withX402(handler, routes, getPremiumPackResourceServer());
+  return cachedGet(request);
+}

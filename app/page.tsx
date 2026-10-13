@@ -19,6 +19,7 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/compone
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { WalletConnect } from "@/components/wallet-connect";
 import { cn } from "@/lib/utils";
 
 type Step = { tool: string; args: unknown; result: any; error?: boolean };
@@ -92,7 +93,10 @@ export default function Home() {
             <img src="/risein-logo.svg" alt="Rise In" className="mr-3 h-5 w-auto" />
             <span className="text-foreground">/ Agentmaxxing</span>&nbsp;starter kit
           </Label>
-          {status && <Label>Model: {status.model}</Label>}
+          <div className="flex items-center gap-4">
+            {status && <Label>Model: {status.model}</Label>}
+            <WalletConnect />
+          </div>
         </div>
         <h1 className="text-5xl leading-[0.9] font-bold tracking-[-0.045em] uppercase md:text-7xl">
           Agentic <span className="text-primary">starter.</span>

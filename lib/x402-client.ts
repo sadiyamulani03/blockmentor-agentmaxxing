@@ -93,12 +93,15 @@ export async function unlockWithTestUSDC(address: `0x${string}`): Promise<{ txHa
         method: "eth_signTypedData_v4",
         params: [
           address,
-          JSON.stringify({
-            domain: message.domain,
-            types: message.types,
-            primaryType: message.primaryType,
-            message: message.message,
-          }),
+          JSON.stringify(
+            {
+              domain: message.domain,
+              types: message.types,
+              primaryType: message.primaryType,
+              message: message.message,
+            },
+            (_key, value) => (typeof value === "bigint" ? value.toString() : value)
+          ),
         ],
       });
     },

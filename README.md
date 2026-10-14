@@ -65,6 +65,27 @@ No server sessions, no external APIs, no Gemini calls for grading — the concep
 
 Try it: `Quiz me on Solidity mappings at intermediate difficulty, 2 questions.` then `My answers: [1, 0].`
 
+## 🚀 Week 3: Give It A Wallet (Crypto Capability & Payments)
+
+BlockMentor integrates crypto wallet capabilities and on-chain payments using x402 on the Base Sepolia testnet to unlock premium learning packs.
+
+### 📦 Deliverables & Proof of Work
+- **Demo Video:** [Watch Week 3 Demo](https://drive.google.com/file/d/18V8m_1wzUCCmZtbvsiXeIvCn59OxxKFq/view?usp=sharing)
+- **Live Demo App:** [blockmentor-agentmaxxing.vercel.app](https://blockmentor-agentmaxxing.vercel.app/)
+- **Network:** Base Sepolia Testnet
+- **Token / Contract:** Testnet USDC (`0x036CbD53842c5426634e7929541eC2318f3dCF7e`)
+
+### 📢 Social Proof & Announcements
+- [X / Twitter Post 1](https://x.com/BlockMentor03/status/2110316451068580005)
+- [X / Twitter Post 2](https://x.com/BlockMentor03/status/2110316560422453276)
+- [X / Twitter Post 3](https://x.com/BlockMentor03/status/2110316717717258407)
+
+### ⚙️ Implemented Crypto Capabilities
+1. **Wallet Connection:** Connects directly via MetaMask to Base Sepolia.
+2. **x402 Agentic Payment Flow:** Uses EIP-712 / EIP-3009 `TransferWithAuthorization` for seamless micro-payments.
+3. **Premium Content Gating:** Locks advanced study plans and exercises behind a 0.10 test USDC payment.
+4. **Fallback & Streaming AI:** Instant starter plans, local caching, and reliable study schedule generation.
+
 ## Key features
 
 - Chat UI (`app/page.tsx`) that auto-lists every registered tool from `GET /api/agent` — no manual tool wiring in the UI.

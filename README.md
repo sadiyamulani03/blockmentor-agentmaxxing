@@ -79,6 +79,7 @@ BlockMentor integrates crypto wallet capabilities and on-chain payments using x4
 - [X / Twitter Post 1](https://x.com/BlockMentor03/status/2110316451068580005)
 - [X / Twitter Post 2](https://x.com/BlockMentor03/status/2110316560422453276)
 - [X / Twitter Post 3](https://x.com/BlockMentor03/status/2110316717717258407)
+- **LinkedIn Post:** https://lnkd.in/p/dDMZRT3h
 
 ### ⚙️ Implemented Crypto Capabilities
 1. **Wallet Connection:** Connects directly via MetaMask to Base Sepolia.
